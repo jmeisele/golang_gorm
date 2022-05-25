@@ -22,10 +22,21 @@ func CreateDB() {
 	if err != nil {
 		panic(err)
 	}
-
+	
 	// Migrate the schema
 	db.AutoMigrate(&Book{})
-
+	
 	// Create
 	db.Create(&Book{Id:1, Title: "Lord of the Rings"})
+}
+
+func GetDB() *gorm.DB {
+	return db
+}
+
+func Connect() {
+	db, err := gorm.Open(sqlite.Open("bookstore.db"), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
 }
