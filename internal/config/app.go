@@ -12,10 +12,12 @@ type Book struct {
 }
 
 var Books = []Book{
-	{1, "Lord of the rings"},
-	{2, "Star Wars"},
-	{3, "The Hobbit"},
+	{Id: 1, Title: "Lord of the rings"},
+	{Id: 2, Title: "Star Wars"},
+	{Id: 3, Title: "The Hobbit"},
 }
+
+var db *gorm.DB
 
 func CreateDB() {
 	db, err := gorm.Open(sqlite.Open("bookstore.db"), &gorm.Config{})
@@ -35,8 +37,9 @@ func GetDB() *gorm.DB {
 }
 
 func Connect() {
-	db, err := gorm.Open(sqlite.Open("bookstore.db"), &gorm.Config{})
+	d, err := gorm.Open(sqlite.Open("bookstore.db"), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
+	db = d
 }

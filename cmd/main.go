@@ -18,10 +18,10 @@ func main() {
 	
 	// Creating DB
 	log.Println("Creating our initial DB")
-	config.CreateDB()
+	config.Connect()
 	
 	// Registering routes
-	fmt.Println("Registering routes")
+	log.Println("Registering routes")
 	router := mux.NewRouter()
 	routes.BookStoreRoutes(router)
 	http.Handle("/", router)
