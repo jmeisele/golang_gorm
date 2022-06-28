@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -14,6 +15,7 @@ import (
 var NewBook models.Book
 
 func GetBook(w http.ResponseWriter, r *http.Request){
+	log.Println("Getting all books")
 	newBooks := models.GetAllBooks()
 	res, _ := json.Marshal(newBooks)
 	w.Header().Set("Content-Type", "application/json")
@@ -24,6 +26,7 @@ func GetBook(w http.ResponseWriter, r *http.Request){
 func GetBookById( w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
 	bookId := vars["bookId"]
+	log.Printf("Getting book: %v\n", bookId)
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
 		fmt.Println("Error while parsing")
@@ -39,6 +42,7 @@ func CreateBook(w http.ResponseWriter, r *http.Request){
 	CreateBook := models.Book{}
 	utils.ParseBody(r, CreateBook)
 	b := CreateBook.CreateBook()
+	log.Printf("Creating book: %v\n", b)
 	res, _ := json.Marshal(b)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -48,6 +52,7 @@ func CreateBook(w http.ResponseWriter, r *http.Request){
 func DeleteBook(w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
 	bookId := vars["bookId"]
+	log.Printf("Deleting book: %v\n", bookId)
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
 		fmt.Println("Error while parsing")
@@ -64,6 +69,7 @@ func UpdateBook(w http.ResponseWriter, r *http.Request){
 	utils.ParseBody(r, updateBook)
 	vars := mux.Vars(r)
 	bookId := vars["bookId"]
+	log.Printf("Updating book: %v\n", bookId)
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
 		fmt.Println("Error while parsing")

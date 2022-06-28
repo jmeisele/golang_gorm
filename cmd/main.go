@@ -13,17 +13,16 @@ import (
 const host = "localhost"
 const port = 8081
 
-
 func main() {
-	
+
 	// Creating DB
 	log.Println("Creating our initial DB")
 	config.Connect()
-	
+
 	// Registering routes
 	log.Println("Registering routes")
 	router := mux.NewRouter()
-	routes.BookStoreRoutes(router)
+	routes.RegisterBookStoreRoutes(router)
 	http.Handle("/", router)
 	err := http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), router)
 	if err != nil {
