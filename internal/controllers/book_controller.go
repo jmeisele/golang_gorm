@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -14,7 +13,7 @@ import (
 
 var NewBook models.Book
 
-func GetBook(w http.ResponseWriter, r *http.Request){
+func GetBook(w http.ResponseWriter, r *http.Request) {
 	log.Println("Getting all books")
 	newBooks := models.GetAllBooks()
 	res, _ := json.Marshal(newBooks)
@@ -23,39 +22,38 @@ func GetBook(w http.ResponseWriter, r *http.Request){
 	w.Write(res)
 }
 
-func GetBookById( w http.ResponseWriter, r *http.Request){
+func GetBookById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	bookId := vars["bookId"]
 	log.Printf("Getting book: %v\n", bookId)
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
-		fmt.Println("Error while parsing")
+		log.Println("Error while parsing")
 	}
 	bookDetails, _ := models.GetBookById(ID)
-	res , _ := json.Marshal(bookDetails)
+	res, _ := json.Marshal(bookDetails)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
 
-func CreateBook(w http.ResponseWriter, r *http.Request){
-	CreateBook := models.Book{}
+func CreateBook(w http.ResponseWriter, r *http.Request) {
+	CreateBook := &models.Book{}
 	utils.ParseBody(r, CreateBook)
 	b := CreateBook.CreateBook()
-	log.Printf("Creating book: %v\n", b)
 	res, _ := json.Marshal(b)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
 
-func DeleteBook(w http.ResponseWriter, r *http.Request){
+func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	bookId := vars["bookId"]
 	log.Printf("Deleting book: %v\n", bookId)
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
-		fmt.Println("Error while parsing")
+		log.Println("Error while parsing")
 	}
 	book := models.DeleteBook(ID)
 	res, _ := json.Marshal(book)
@@ -64,7 +62,7 @@ func DeleteBook(w http.ResponseWriter, r *http.Request){
 	w.Write(res)
 }
 
-func UpdateBook(w http.ResponseWriter, r *http.Request){
+func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	var updateBook = &models.Book{}
 	utils.ParseBody(r, updateBook)
 	vars := mux.Vars(r)
@@ -72,16 +70,16 @@ func UpdateBook(w http.ResponseWriter, r *http.Request){
 	log.Printf("Updating book: %v\n", bookId)
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
-		fmt.Println("Error while parsing")
+		log.Println("Error while parsing")
 	}
 	bookDetails, db := models.GetBookById(ID)
-	if updateBook.Name != ""{
+	if updateBook.Name != "" {
 		bookDetails.Name = updateBook.Name
 	}
-	if updateBook.Author != ""{
+	if updateBook.Author != "" {
 		bookDetails.Author = updateBook.Author
 	}
-	if updateBook.Publication != ""{
+	if updateBook.Publication != "" {
 		bookDetails.Publication = updateBook.Publication
 	}
 	db.Save(&bookDetails)
